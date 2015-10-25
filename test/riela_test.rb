@@ -1,10 +1,12 @@
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
 require 'minitest/autorun'
 require 'net/http'
-require_relative 'server'
+require 'riela'
 
-class TestServer < MiniTest::Test
+class TestRiela < MiniTest::Test
   def setup
-    @server = Server.new(nil, port=4444)
+    @server = Riela::Server.new(nil, port=4444)
     @server.start
   end
 
@@ -23,7 +25,7 @@ class TestServer < MiniTest::Test
 
   def test_that_handler_is_called
     handler = MiniTest::Mock.new
-    handler.expect(:handle, nil, [Request, Response])
+    handler.expect(:handle, nil, [Riela::Request, Riela::Response])
     @server.handler = handler
 
     response = Net::HTTP.get_response URI('http://localhost:4444/')
